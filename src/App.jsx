@@ -29,6 +29,7 @@ function App() {
     canPost: false,
     canPatch: false,
     canDelete: false,
+    loginKey: 0,
   });
   const medals = useRef([
     { id: 1, name: "gold", color: "#FFD700", rank: 1 },
@@ -176,9 +177,9 @@ function App() {
     setCountries(mutableCountries);
   }
   async function handleLogin(username, password) {
-    try {
-      // Progress
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate slow server connection
 
+    try {
       const resp = await axios.post(userEndpoint, {
         username: username,
         password: password,
@@ -191,12 +192,20 @@ function App() {
         ex.response &&
         (ex.response.status === 401 || ex.response.status === 400)
       ) {
-        alert("Login failed");
+        setUser({
+          name: null,
+          authenticated: false,
+          canPost: false,
+          canPatch: false,
+          canDelete: false,
+          loginKey: !(!user.loginKey) ? user.loginKey+1 : 1,
+        });
       } else if (ex.response) {
         console.log(ex.response);
       } else {
         console.log("Request failed");
       }
+    } finally {
     }
   }
   function handleLogout() {
@@ -331,7 +340,7 @@ function App() {
       {user.authenticated ? (
         <Logout onLogout={handleLogout} />
       ) : (
-        <Login onLogin={handleLogin} />
+        <Login onLogin={handleLogin} user={user}/>
       )}
       <Flex p="2" pl="8" className="fixedHeader" justify="between">
         <Heading size="6">

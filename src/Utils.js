@@ -15,5 +15,6 @@ export function getUser(encoded) {
     canPost: decoded["roles"].indexOf("medals-post") === -1 ? false : true,
     canPatch: decoded["roles"].indexOf("medals-patch") === -1 ? false : true,
     canDelete: decoded["roles"].indexOf("medals-delete") === -1 ? false : true,
+    loginKey: 0,
   };
 }
