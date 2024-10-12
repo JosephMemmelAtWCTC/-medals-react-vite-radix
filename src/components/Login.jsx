@@ -50,7 +50,7 @@ function Login(props) {
       <Tooltip content="Login">
         <Button
           onClick={() => setOpen(true)}
-          style={{ position: "fixed", bottom: 20, left: 20, zIndex: 100 }}
+          style={{ position: "fixed", bottom: 20, left: 70, zIndex: 100, height: 45}}
           variant="ghost"
         >
           <EnterIcon />

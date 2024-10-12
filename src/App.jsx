@@ -13,10 +13,12 @@ import {
   Heading,
   Badge,
   Container,
+  Tooltip,
 } from "@radix-ui/themes";
-import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
+import { SunIcon, MoonIcon, BorderWidthIcon } from "@radix-ui/react-icons";
 import "@radix-ui/themes/styles.css";
-import * as Progress from "@radix-ui/react-progress";
+import * as Avatar from "@radix-ui/react-avatar";
+import * as HoverCard from "@radix-ui/react-hover-card";
 import "./App.css";
 
 function App() {
@@ -330,18 +332,52 @@ function App() {
 
   return (
     <Theme appearance={appearance}>
-      <Button
-        onClick={toggleAppearance}
-        style={{ position: "fixed", bottom: 20, right: 20, zIndex: 100 }}
-        variant="ghost"
-      >
-        {appearance === "dark" ? <MoonIcon /> : <SunIcon />}
-      </Button>
+      <Tooltip content={(appearance === "dark")? "Enter light mode": "Enter dark mode"}>
+        <Button
+          onClick={toggleAppearance}
+          style={{ position: "fixed", bottom: 20, right: 20, zIndex: 100 }}
+          variant="ghost"
+        >
+          {appearance === "dark" ? <MoonIcon /> : <SunIcon />}
+        </Button>
+      </Tooltip>
+
       {user.authenticated ? (
         <Logout onLogout={handleLogout} />
       ) : (
         <Login onLogin={handleLogin} user={user}/>
       )}
+
+      {user.authenticated ? (
+        <Flex>
+          <Tooltip content={"Logged in as "+user.name}>
+            <Avatar.Root className="AvatarRoot" style={{ position: "fixed", bottom: 20, left: 20, zIndex: 100 }}>
+              <Avatar.Image
+                className="AvatarImage"
+                src={"https://api.dicebear.com/9.x/fun-emoji/svg?seed="+user.name}//+"&backgroundType=gradientLinear"}
+                alt="Avatar"
+              />
+              {/* <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                CT
+              </Avatar.Fallback> */}
+            </Avatar.Root>
+          </Tooltip>
+
+        </Flex>
+      ):(
+        <Flex>
+          <Tooltip content={"You are not logged in"}>
+            <Avatar.Root className="AvatarRoot" style={{ position: "fixed", bottom: 20, left: 20, zIndex: 100 }}>
+              <Avatar.Image
+                className="AvatarImage AvatarBorder"
+                src={"/medals-react-vite-radix/person_24dp_E8EAED_FILL0_wght200_GRAD0_opsz48.svg"}
+                alt="Log in"
+              />
+            </Avatar.Root>
+          </Tooltip>
+        </Flex>
+      )}
+
       <Flex p="2" pl="8" className="fixedHeader" justify="between">
         <Heading size="6">
           Olympic Medals
@@ -349,6 +385,7 @@ function App() {
             <Heading size="6">{getAllMedalsTotal()}</Heading>
           </Badge>
         </Heading>
+
         {user.canPost && <NewCountry onAdd={handleAdd} />}
       </Flex>
       <Container className="bg"></Container>
