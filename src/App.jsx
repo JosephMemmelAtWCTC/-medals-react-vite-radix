@@ -22,7 +22,7 @@ import * as HoverCard from "@radix-ui/react-hover-card";
 import "./App.css";
 
 function App() {
-  const [appearance, setAppearance] = useState("dark");
+  const [appearance, setAppearance] = useState(localStorage.getItem("appearance") ?? "dark");
   const [countries, setCountries] = useState([]);
   const [connection, setConnection] = useState(null);
   const [user, setUser] = useState({
@@ -230,6 +230,7 @@ function App() {
   }
   function toggleAppearance() {
     setAppearance(appearance === "light" ? "dark" : "light");
+    localStorage.setItem("appearance", appearance === "light" ? "dark" : "light");
   }
 
   // this is the functional equivalent to componentDidMount
@@ -335,7 +336,7 @@ function App() {
       <Tooltip content={(appearance === "dark")? "Enter light mode": "Enter dark mode"}>
         <Button
           onClick={toggleAppearance}
-          style={{ position: "fixed", bottom: 20, right: 20, zIndex: 100 }}
+          style={{ position: "fixed", bottom: 20, right: 20, zIndex: 100, width: 25, height: 25 }}
           variant="ghost"
         >
           {appearance === "dark" ? <MoonIcon /> : <SunIcon />}
